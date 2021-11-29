@@ -1,14 +1,13 @@
+import {
+  loadTodoFromApi,
+  toggleComplete,
+  saveTodoToApi,
+} from "./todo.service.js";
+
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("https://ubrnopsjlvwleakngnmr.supabase.co/rest/v1/todos", {
-    headers: {
-      apiKey:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODE5MjQ4MSwiZXhwIjoxOTUzNzY4NDgxfQ.3JdQW11rNZNpvcehhwFVaofXL2agE5LDn_3O4BvSAHw",
-    },
-  })
-    .then((response) => response.json())
-    .then((items) => {
-      items.forEach((item) => addTodo(item));
-    });
+  loadTodoFromApi().then((items) => {
+    items.forEach((item) => addTodo(item));
+  });
 });
 
 const onClickCheckbox = (e) => {
@@ -18,16 +17,7 @@ const onClickCheckbox = (e) => {
 
   e.preventDefault();
 
-  fetch("https://ubrnopsjlvwleakngnmr.supabase.co/rest/v1/todos?id=eq." + id, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      apiKey:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODE5MjQ4MSwiZXhwIjoxOTUzNzY4NDgxfQ.3JdQW11rNZNpvcehhwFVaofXL2agE5LDn_3O4BvSAHw",
-      Prefer: "return=representation",
-    },
-    body: JSON.stringify({ done: isDone }),
-  }).then(() => {
+  toggleComplete(id, isDone).then(() => {
     e.target.checked = isDone;
   });
 };
@@ -64,21 +54,10 @@ document.querySelector("form").addEventListener("submit", (e) => {
     done: false,
   };
 
-  fetch("https://ubrnopsjlvwleakngnmr.supabase.co/rest/v1/todos", {
-    method: "POST",
-    body: JSON.stringify(item),
-    headers: {
-      "Content-Type": "application/json",
-      apiKey:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODE5MjQ4MSwiZXhwIjoxOTUzNzY4NDgxfQ.3JdQW11rNZNpvcehhwFVaofXL2agE5LDn_3O4BvSAHw",
-      Prefer: "return=representation",
-    },
-  })
-    .then((response) => response.json())
-    .then((items) => {
-      addTodo(items[0]);
+  saveTodoToApi(item).then((items) => {
+    addTodo(items[0]);
 
-      input.value = "";
-      input.focus();
-    });
+    input.value = "";
+    input.focus();
+  });
 });
