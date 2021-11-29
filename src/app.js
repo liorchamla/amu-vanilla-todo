@@ -22,3 +22,20 @@ const addTodo = (item) => {
 };
 
 TODO_ITEMS.forEach((item) => addTodo(item));
+
+document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const input = document.querySelector('input[name="todo-text"]');
+
+  const item = {
+    id: Date.now(),
+    text: input.value,
+    done: false,
+  };
+
+  addTodo(item);
+
+  input.value = "";
+  input.focus();
+});
