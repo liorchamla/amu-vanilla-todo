@@ -35,13 +35,25 @@ document.querySelector("form").addEventListener("submit", (e) => {
   const input = document.querySelector('input[name="todo-text"]');
 
   const item = {
-    id: Date.now(),
     text: input.value,
     done: false,
   };
 
-  addTodo(item);
+  fetch("https://ubrnopsjlvwleakngnmr.supabase.co/rest/v1/todos", {
+    method: "POST",
+    body: JSON.stringify(item),
+    headers: {
+      "Content-Type": "application/json",
+      apiKey:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODE5MjQ4MSwiZXhwIjoxOTUzNzY4NDgxfQ.3JdQW11rNZNpvcehhwFVaofXL2agE5LDn_3O4BvSAHw",
+      Prefer: "return=representation",
+    },
+  })
+    .then((response) => response.json())
+    .then((items) => {
+      addTodo(items[0]);
 
-  input.value = "";
-  input.focus();
+      input.value = "";
+      input.focus();
+    });
 });
