@@ -65,7 +65,7 @@ const addTodo = (item) => {
     } /> 
                 ${item.text}
             </label>
-            <a href="#/${item.id}">Détails</a>
+            <a href="#/${item.id}">ℹ️</a>
         </li>
     `
   );
