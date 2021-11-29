@@ -2,6 +2,7 @@ import {
   loadTodoFromApi,
   toggleComplete,
   saveTodoToApi,
+  loadTodoItemFromApi,
 } from "./todo.service.js";
 
 const displayTodos = () => {
@@ -64,6 +65,7 @@ const addTodo = (item) => {
     } /> 
                 ${item.text}
             </label>
+            <a href="#/${item.id}">Détails</a>
         </li>
     `
   );
@@ -73,4 +75,33 @@ const addTodo = (item) => {
     .addEventListener("click", onClickCheckbox);
 };
 
-document.addEventListener("DOMContentLoaded", displayTodos);
+const displayTodoDetails = (id) => {
+  loadTodoItemFromApi(id).then((item) => {
+    document.querySelector("main").innerHTML = `
+              <h2>Détails de la tâche ${item.id}</h2>
+              <p><strong>Texte :</strong> ${item.text}</p>
+              <p><strong>Status : </strong> ${
+                item.done ? "Complété" : "A faire"
+              }</p>
+              <a href="#/">Retour à la liste</a>
+          `;
+  });
+};
+
+window.onpopstate = (e) => {
+  const route =
+    window.location.hash !== "" ? window.location.hash.substr(1) : "/";
+
+  if (route === "/") {
+    displayTodos();
+    return;
+  }
+
+  const todoId = +route.substr(1);
+
+  displayTodoDetails(todoId);
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  window.dispatchEvent(new PopStateEvent("popstate"));
+});

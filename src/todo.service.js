@@ -3,7 +3,7 @@ const API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODE5MjQ4MSwiZXhwIjoxOTUzNzY4NDgxfQ.3JdQW11rNZNpvcehhwFVaofXL2agE5LDn_3O4BvSAHw";
 
 export const loadTodoFromApi = () => {
-  return fetch(API_URL, {
+  return fetch(API_URL + "?order=created_at", {
     headers: {
       apiKey: API_KEY,
     },
@@ -32,4 +32,16 @@ export const saveTodoToApi = (item) => {
       Prefer: "return=representation",
     },
   }).then((response) => response.json());
+};
+
+export const loadTodoItemFromApi = (id) => {
+  return fetch(API_URL + "?id=eq." + id, {
+    headers: {
+      "Content-Type": "application/json",
+      apiKey: API_KEY,
+      Prefer: "return=representation",
+    },
+  })
+    .then((response) => response.json())
+    .then((items) => items[0]);
 };
