@@ -4,11 +4,40 @@ import {
   saveTodoToApi,
 } from "./todo.service.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+const displayTodos = () => {
+  document.querySelector("main").innerHTML = `
+        <h2>La liste des tâches</h2>
+        <ul></ul>
+        <form>
+          <input type="text" name="todo-text" placeholder="Ajouter une tâche" />
+          <button>Ajouter</button>
+        </form>
+      `;
+
   loadTodoFromApi().then((items) => {
     items.forEach((item) => addTodo(item));
   });
-});
+
+  document.querySelector("form").addEventListener("submit", onSubmitForm);
+};
+
+const onSubmitForm = (e) => {
+  e.preventDefault();
+
+  const input = document.querySelector('input[name="todo-text"]');
+
+  const item = {
+    text: input.value,
+    done: false,
+  };
+
+  saveTodoToApi(item).then((items) => {
+    addTodo(items[0]);
+
+    input.value = "";
+    input.focus();
+  });
+};
 
 const onClickCheckbox = (e) => {
   const inputId = e.target.id;
@@ -44,20 +73,4 @@ const addTodo = (item) => {
     .addEventListener("click", onClickCheckbox);
 };
 
-document.querySelector("form").addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const input = document.querySelector('input[name="todo-text"]');
-
-  const item = {
-    text: input.value,
-    done: false,
-  };
-
-  saveTodoToApi(item).then((items) => {
-    addTodo(items[0]);
-
-    input.value = "";
-    input.focus();
-  });
-});
+document.addEventListener("DOMContentLoaded", displayTodos);
