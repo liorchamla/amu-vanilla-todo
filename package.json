@@ -4,6 +4,8 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
+    "test-gh": "jest",
+    "e2e-gh": "cypress run",
     "test": "jest --watch",
     "watch": "webpack --mode development --watch",
     "live": "live-server --entry-file=./index.html --watch=./src,./index.html",
