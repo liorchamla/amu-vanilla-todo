@@ -5,7 +5,7 @@ import {
   loadTodoItemFromApi,
 } from "./todo.service.js";
 
-const displayTodos = () => {
+export const displayTodos = async () => {
   document.querySelector("main").innerHTML = `
         <h2>La liste des tâches</h2>
         <ul></ul>
@@ -15,9 +15,9 @@ const displayTodos = () => {
         </form>
       `;
 
-  loadTodoFromApi().then((items) => {
-    items.forEach((item) => addTodo(item));
-  });
+  const items = await loadTodoFromApi();
+
+  items.forEach((item) => addTodo(item));
 
   document.querySelector("form").addEventListener("submit", onSubmitForm);
 };
