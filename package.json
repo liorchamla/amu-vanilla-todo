@@ -9,6 +9,7 @@
     "test": "jest --watch",
     "watch": "webpack --mode development --watch",
     "live": "live-server --entry-file=./index.html --watch=./src,./index.html",
+    "start": "live-server --entry-file=./index.html",
     "e2e": "cypress open",
     "dev": "concurrently \"npm:watch\" \"npm:live\"",
     "build": "webpack --mode production"

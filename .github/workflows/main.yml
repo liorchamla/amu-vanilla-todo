@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Dev CI
 
 # Controls when the workflow will run
 on:
@@ -32,5 +32,15 @@ jobs:
       - name: Jest unit tests
         run: npm run test-gh
 
-      - name: E2E with Cypress
-        run: npm run e2e-gh
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          build: npm run build
+          start: npm start
+
+      - name: "Deploy to Netlify"
+        uses: jsmrcaga/action-netlify-deploy@v1.1.0
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.MY_TOKEN_SECRET }}
+          NETLIFY_DEPLOY_TO_PROD: true
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_ID }}
