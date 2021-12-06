@@ -15,9 +15,10 @@ export const displayTodos = async () => {
         </form>
       `;
 
-  const items = await loadTodoFromApi();
+  loadTodoFromApi().then(items => {
+    items.forEach((item) => addTodo(item));
+  });
 
-  items.forEach((item) => addTodo(item));
 
   document.querySelector("form").addEventListener("submit", onSubmitForm);
 };
